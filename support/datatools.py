@@ -61,7 +61,7 @@ def augment_patch(patch, in_shape, lower, upper, shift=2):
     patch = (patch - lower) / float(upper - lower)  
     return patch[center[0] - left[0]: center[0] + right[0], 
                  center[1] - left[1]: center[1] + right[1], 
-                 center[2] - left[2]: center[2] + right[2]]
+                 center[2] - left[2]: center[2] + right[2]].flatten()
     
 
 def batch_generator(patch_paths, in_shape, 
@@ -102,7 +102,7 @@ def batch_generator(patch_paths, in_shape,
             patch_list = pool.map(augment, patch_list)
         
         counter += 1
-        labels = ['NODULE' in patch_path 
+        labels = [1 if 'NODULE' in patch_path else -1
                   for patch_path in batch_files]
         yield (asarray(patch_list), 
                asarray(labels))
